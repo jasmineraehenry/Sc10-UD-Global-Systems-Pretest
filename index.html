@@ -3,135 +3,155 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Science 10: Unit D Global Systems Review</title>
+    <title>Sc.10 UD Global Systems Pretest</title>
     <style>
         :root {
-            --bg-color: #E0FBFC;
+            --bg-color: #E0FBFC; /* Glacial Blue */
             --container-bg: #FFFFFF;
-            --primary: #293241;
-            --accent: #3D5A80;
-            --correct: #4CAF50;
-            --incorrect: #EE6C4D;
-            --text-color: #000000;
+            --primary: #293241; /* Deep Ocean */
+            --accent: #3D5A80; /* Forest Blue/Green */
+            --correct: #4CAF50; /* Success Green */
+            --incorrect: #EE6C4D; /* Climate Warning Coral */
+            --text-color: #000000; /* Strict Black Text */
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             background-color: var(--bg-color);
             color: var(--text-color);
             display: flex;
             justify-content: center;
             padding: 20px;
+            line-height: 1.6;
         }
 
         #quiz-container {
             background-color: var(--container-bg);
-            max-width: 700px;
+            max-width: 800px;
             width: 100%;
             padding: 40px;
-            border-radius: 15px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-            border-top: 8px solid var(--primary);
+            border-radius: 12px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+            border-top: 10px solid var(--primary);
         }
 
-        h1 { color: var(--primary); text-align: center; }
+        h1 { 
+            color: var(--primary); 
+            text-align: center; 
+            margin-bottom: 30px;
+            font-size: 1.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
         
-        .question { font-size: 1.2rem; font-weight: bold; margin-bottom: 20px; }
-
-        .options-list { list-style: none; padding: 0; }
+        .question { 
+            font-size: 1.25rem; 
+            font-weight: 700; 
+            margin-bottom: 25px; 
+            color: var(--text-color);
+        }
 
         .option-btn {
             display: block;
             width: 100%;
-            padding: 12px;
-            margin: 10px 0;
+            padding: 15px;
+            margin: 12px 0;
             border: 2px solid var(--accent);
-            background: none;
+            background: #fff;
             cursor: pointer;
-            border-radius: 8px;
+            border-radius: 6px;
             text-align: left;
             font-size: 1rem;
-            transition: 0.3s;
+            font-weight: 500;
+            transition: all 0.2s ease;
             color: var(--text-color);
         }
 
         .option-btn:hover:not([disabled]) {
             background-color: var(--bg-color);
+            border-color: var(--primary);
         }
+
+        .option-btn:disabled { cursor: default; }
 
         .feedback {
-            margin-top: 20px;
-            padding: 15px;
-            border-radius: 8px;
+            margin-top: 25px;
+            padding: 18px;
+            border-radius: 6px;
             display: none;
-            font-weight: 500;
+            font-weight: 600;
+            text-align: center;
         }
 
-        #next-btn, #restart-btn {
+        #next-btn {
             background-color: var(--primary);
             color: white;
             border: none;
-            padding: 12px 30px;
-            border-radius: 8px;
+            padding: 12px 35px;
+            border-radius: 6px;
             cursor: pointer;
             float: right;
             display: none;
             margin-top: 20px;
+            font-weight: bold;
         }
 
         #score-screen { display: none; text-align: center; }
-        .summary-box { text-align: left; background: #f4f4f4; padding: 20px; border-radius: 8px; margin-top: 20px; }
+        .summary-box { text-align: left; background: #f8f9fa; padding: 25px; border-radius: 8px; margin-top: 25px; border-left: 5px solid var(--accent); }
+        .summary-box li { margin-bottom: 10px; }
     </style>
 </head>
 <body>
 
 <div id="quiz-container">
     <div id="quiz-box">
-        <h1 id="q-title">Question 1/25</h1>
+        <h1>Sc.10 UD Global Systems Pretest</h1>
+        <h3 id="progress" style="color: var(--accent);">Question 1/25</h3>
         <p id="question-text" class="question"></p>
-        <div id="options-container" class="options-list"></div>
+        <div id="options-container"></div>
         <div id="feedback-box" class="feedback"></div>
-        <button id="next-btn">Next Question</button>
+        <button id="next-btn">Next Question &rarr;</button>
+        <div style="clear:both;"></div>
     </div>
 
     <div id="score-screen">
-        <h1>Review Complete!</h1>
-        <p style="font-size: 2rem;">Your Score: <span id="final-score"></span>/25</p>
+        <h1>Pretest Results</h1>
+        <p style="font-size: 2.5rem; font-weight: 800; color: var(--primary);">Score: <span id="final-score"></span> / 25</p>
         <div class="summary-box">
-            <h3>Key Study Areas:</h3>
+            <h3 style="color: var(--primary);">Topic-Specific Feedback:</h3>
             <ul id="study-feedback"></ul>
         </div>
-        <button id="restart-btn" onclick="location.reload()">Try Again</button>
+        <button id="restart-btn" onclick="location.reload()" style="background: var(--accent); color:white; border:none; padding:15px 30px; border-radius:6px; margin-top:20px; cursor:pointer;">Restart Pretest</button>
     </div>
 </div>
 
 <script>
     const quizData = [
-        { q: "A sample of ice at its melting point absorbs 12.5 kJ. If Hfus is 6.01 kJ/mol, what mass melted? (Molar mass = 18.02 g/mol)", a: ["37.5 g", "2.08 g", "1.35 g", "0.0375 g"], c: 0, tag: "Math" },
-        { q: "Which describes the 'albedo effect'?", a: ["Reflection of solar radiation; higher albedo cools.", "Trapping infrared radiation.", "Photosynthesis.", "Ocean currents."], c: 0, tag: "Albedo" },
-        { q: "Quantity of energy to heat 250 g of water from 20.0°C to 45.0°C?", a: ["2.6 x 10^4 J", "26,187.5 J", "4.7 x 10^4 J", "20.9 J"], c: 0, tag: "Math" },
-        { q: "Coriolis effect in the Northern Hemisphere deflects air to the:", a: ["Right (East)", "Left (West)", "Upward", "South"], c: 0, tag: "Coriolis" },
-        { q: "Which layer contains the ozone layer?", a: ["Stratosphere", "Troposphere", "Mesosphere", "Lithosphere"], c: 0, tag: "Atmosphere" },
-        { q: "Energy to vaporize 50.0 g of water at 100°C? (Hvap = 40.7 kJ/mol)", a: ["113 kJ", "2035 kJ", "2.26 kJ", "14.7 kJ"], c: 0, tag: "Math" },
-        { q: "What is an 'open system'?", a: ["Exchanges both matter and energy", "Exchanges energy only", "No exchange", "Net budget is zero"], c: 0, tag: "Systems" },
-        { q: "100g metal at 90°C in 100g water at 20°C reaches 25°C. Metal's specific heat?", a: ["0.322 J/g°C", "4.19 J/g°C", "2.09 J/g°C", "0.080 J/g°C"], c: 0, tag: "Math" },
-        { q: "Primary natural greenhouse gas?", a: ["Water Vapor", "Nitrogen", "Oxygen", "Argon"], c: 0, tag: "Greenhouse" },
-        { q: "Water moves heat globally because of its:", a: ["High specific heat capacity", "Low solid density", "High albedo", "Low Hvap"], c: 0, tag: "Hydrosphere" },
-        { q: "During a phase change, temperature:", a: ["Remains constant", "Increases", "Decreases", "Fluctuates"], c: 0, tag: "Phase Changes" },
-        { q: "Primary reason for seasons?", a: ["Tilt of Earth's axis", "Distance from sun", "Solar fluctuations", "Rotation speed"], c: 0, tag: "Astronomy" },
-        { q: "Solar energy is most 'spread out' at the:", a: ["Polar zones", "Equator", "Tropics", "Stratosphere"], c: 0, tag: "Radiation" },
-        { q: "Positive net radiation budget leads to:", a: ["Increasing global temps", "Decreasing global temps", "Increased albedo", "Slower rotation"], c: 0, tag: "Budget" },
-        { q: "Heat of fusion if 25.0 kJ melts 75.0 g of a substance?", a: ["0.333 kJ/g", "1.88 kJ/g", "3.00 kJ/g", "13.3 kJ/g"], c: 0, tag: "Math" },
-        { q: "Convection currents are defined as:", a: ["Warm air rising, cool air sinking", "Conduction through ground", "Density differences alone", "Moon radiation"], c: 0, tag: "Convection" },
-        { q: "Which has the highest albedo?", a: ["Snow and Ice", "Deep Ocean", "Forest", "Soil"], c: 0, tag: "Albedo" },
-        { q: "Find 'c' for 50g object using 1250J over 15°C:", a: ["1.67 J/g°C", "0.600 J/g°C", "25.0 J/g°C", "375 J/g°C"], c: 0, tag: "Math" },
-        { q: "Ice core samples show history by:", a: ["Trapped gas bubbles", "Ice thickness", "Salt content", "Fossils"], c: 0, tag: "Evidence" },
-        { q: "Solid directly to gas:", a: ["Sublimation", "Deposition", "Condensation", "Freezing"], c: 0, tag: "Phase Changes" },
-        { q: "Heat 0°C to 10°C with 1.51 kJ. Mass of water?", a: ["36.0 g", "15.1 g", "4.52 g", "151 g"], c: 0, tag: "Math" },
-        { q: "Climatograph displays:", a: ["Bars (Precip) & Line (Temp)", "Line (Precip) & Bars (Temp)", "Dots", "Shaded regions"], c: 0, tag: "Climate" },
-        { q: "Biome with permafrost and low precipitation?", a: ["Tundra", "Taiga", "Grassland", "Deciduous"], c: 0, tag: "Biomes" },
-        { q: "Sig digits in 0.005040 m?", a: ["4", "7", "3", "6"], c: 0, tag: "Sig Digits" },
-        { q: "Energy returns to space via:", a: ["Infrared Radiation", "Conduction", "Convection", "Visible Light"], c: 0, tag: "Radiation" }
+        { q: "A sample of ice at its melting point absorbs 12.5 kJ. If Hfus is 6.01 kJ/mol, what mass of ice melted? (Molar mass = 18.02 g/mol)", a: ["37.5 g", "2.08 g", "1.35 g", "0.0375 g"], c: 0, tag: "Energy Calculations" },
+        { q: "Which of the following describes the 'albedo effect' and its impact on the Earth's net radiation budget?", a: ["Percentage of solar radiation reflected; higher albedo cools.", "Infrared radiation trapped by gases.", "Conversion of light into chemical energy.", "Movement of thermal energy via currents."], c: 0, tag: "Albedo" },
+        { q: "Calculate the quantity of thermal energy absorbed by 250 g of water heated from 20.0°C to 45.0°C.", a: ["2.6 x 10^4 J", "26,187.5 J", "4.7 x 10^4 J", "20.9 J"], c: 0, tag: "Energy Calculations" },
+        { q: "In the Northern Hemisphere, the Coriolis effect deflects moving air masses to the:", a: ["Right (East)", "Left (West)", "Straight upward", "South Pole"], c: 0, tag: "Coriolis Effect" },
+        { q: "Which atmospheric layer contains the protective ozone layer?", a: ["Stratosphere", "Troposphere", "Mesosphere", "Lithosphere"], c: 0, tag: "Atmospheric Layers" },
+        { q: "Energy required to vaporize 50.0 g of water at 100°C? (Hvap = 40.7 kJ/mol)", a: ["113 kJ", "2035 kJ", "2.26 kJ", "14.7 kJ"], c: 0, tag: "Energy Calculations" },
+        { q: "Which of the following describes an 'open system'?", a: ["Exchanges both matter and energy", "Exchanges energy but not matter", "Exchanges neither matter nor energy", "Net radiation budget is always zero"], c: 0, tag: "Systems" },
+        { q: "100g of metal (90°C) is put in 100g of water (20°C). Final temp is 25°C. Specific heat of the metal?", a: ["0.322 J/g°C", "4.19 J/g°C", "2.09 J/g°C", "0.080 J/g°C"], c: 0, tag: "Energy Calculations" },
+        { q: "Which is the primary natural greenhouse gas contributing to the greenhouse effect?", a: ["Water Vapor", "Nitrogen", "Oxygen", "Argon"], c: 0, tag: "Greenhouse Effect" },
+        { q: "The hydrosphere moves heat globally primarily because water has a:", a: ["High specific heat capacity", "Low density as a solid", "High albedo", "Low heat of vaporization"], c: 0, tag: "Hydrosphere" },
+        { q: "During a phase change from liquid to gas, the temperature of the substance:", a: ["Remains constant", "Increases steadily", "Decreases slightly", "Fluctuates"], c: 0, tag: "Phase Changes" },
+        { q: "The primary reason for Earth's seasons is:", a: ["Tilt of the Earth's axis", "Distance from the Sun", "Solar output changes", "Rotation speed"], c: 0, tag: "Earth's Tilt" },
+        { q: "Solar energy is most 'spread out' (least intense) at the:", a: ["Polar zones", "Equator", "Tropics", "Mesosphere"], c: 0, tag: "Insolation" },
+        { q: "A positive net radiation budget for an extended period leads to:", a: ["Increasing global temperatures", "Decreasing global temperatures", "Increased polar albedo", "Slower rotation"], c: 0, tag: "Radiation Budget" },
+        { q: "Calculate heat of fusion if 25.0 kJ melts 75.0 g of a substance.", a: ["0.333 kJ/g", "1.88 kJ/g", "3.00 kJ/g", "13.3 kJ/g"], c: 0, tag: "Energy Calculations" },
+        { q: "Convection currents in the atmosphere are primarily defined by:", a: ["Warm air rising and cool air sinking", "Conduction through ground", "Density differences alone", "Moon radiation"], c: 0, tag: "Convection" },
+        { q: "Which of these surfaces has the highest albedo?", a: ["Snow and Ice", "Deep Ocean", "Coniferous Forest", "Agricultural Soil"], c: 0, tag: "Albedo" },
+        { q: "Find 'c' for a 50.0 g object using 1250 J over a 15.0°C change:", a: ["1.67 J/g°C", "0.600 J/g°C", "25.0 J/g°C", "375 J/g°C"], c: 0, tag: "Energy Calculations" },
+        { q: "Ice core samples provide evidence of past climate by:", a: ["Analyzing trapped gas bubbles", "Measuring ice thickness", "Checking salt levels", "Finding desert fossils"], c: 0, tag: "Climate Evidence" },
+        { q: "Phase change from solid directly to gas:", a: ["Sublimation", "Deposition", "Condensation", "Solidification"], c: 0, tag: "Phase Changes" },
+        { q: "Water is heated from 0°C to 10°C using 1.51 kJ. Calculate the mass.", a: ["36.0 g", "15.1 g", "4.52 g", "151 g"], c: 0, tag: "Energy Calculations" },
+        { q: "On a climatograph, precipitation and temperature are shown as:", a: ["Bars and a Line", "Line and Bars", "Dots and a Grid", "Shaded regions"], c: 0, tag: "Climatographs" },
+        { q: "Biome with permafrost and low annual precipitation?", a: ["Tundra", "Taiga", "Grassland", "Deciduous Forest"], c: 0, tag: "Biomes" },
+        { q: "Significant digits in 0.005040 m?", a: ["4", "7", "3", "6"], c: 0, tag: "Sig Digits" },
+        { q: "Thermal energy is transferred from Earth back into space via:", a: ["Infrared Radiation", "Conduction", "Convection", "Visible Light"], c: 0, tag: "Heat Transfer" }
     ];
 
     let currentQ = 0;
@@ -140,7 +160,7 @@
 
     function loadQuestion() {
         const qBox = quizData[currentQ];
-        document.getElementById("q-title").innerText = `Question ${currentQ + 1}/25`;
+        document.getElementById("progress").innerText = `Question ${currentQ + 1}/25`;
         document.getElementById("question-text").innerText = qBox.q;
         const optionsContainer = document.getElementById("options-container");
         optionsContainer.innerHTML = "";
@@ -166,12 +186,12 @@
 
         if(idx === qBox.c) {
             score++;
-            feedback.innerText = "Correct!";
+            feedback.innerText = "Correct! Well done.";
             feedback.style.backgroundColor = "var(--correct)";
             feedback.style.color = "white";
         } else {
             mistakes.push(qBox.tag);
-            feedback.innerText = "Incorrect. The correct answer was: " + qBox.a[qBox.c];
+            feedback.innerText = "Incorrect. Correct answer: " + qBox.a[qBox.c];
             feedback.style.backgroundColor = "var(--incorrect)";
             feedback.style.color = "white";
         }
@@ -196,14 +216,15 @@
         const uniqueMistakes = [...new Set(mistakes)];
         
         if(uniqueMistakes.length === 0) {
-            feedbackList.innerHTML = "<li>Perfect! You have a solid grasp of Global Systems.</li>";
+            feedbackList.innerHTML = "<li><strong>Excellent!</strong> You are fully prepared for the Unit D test.</li>";
         } else {
             uniqueMistakes.forEach(m => {
                 let msg = "";
-                if(m === "Math") msg = "Practice multi-step Q=mcΔT and phase change calculations. Watch your units (kJ vs J)!";
-                if(m === "Sig Digits") msg = "Review the 'Atlantic-Pacific' rule for leading and trailing zeros.";
-                if(m === "Albedo") msg = "Remember: High Albedo = Reflective (Snow/Ice); Low Albedo = Absorbent (Water/Forest).";
-                if(m === "Phase Changes") msg = "Note that temperature stays constant during the plateau of a phase change.";
+                if(m === "Energy Calculations") msg = "Review q=mct and phase change formulas. Check units (kJ vs J) and sig digs.";
+                if(m === "Sig Digits") msg = "Leading zeros are placeholders; trailing zeros after a decimal are significant.";
+                if(m === "Albedo") msg = "High albedo = more reflection (ice/snow). Low albedo = more absorption (water).";
+                if(m === "Phase Changes") msg = "Remember that temperature stays constant during a phase change plateau.";
+                if(m === "Coriolis Effect") msg = "Deflection is to the right in the North and to the left in the South.";
                 feedbackList.innerHTML += `<li><strong>${m}:</strong> ${msg}</li>`;
             });
         }
