@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Science 10: Unit D Global Systems Review</title>
+    <style>
+        :root {
+            --bg-color: #E0FBFC;
+            --container-bg: #FFFFFF;
+            --primary: #293241;
+            --accent: #3D5A80;
+            --correct: #4CAF50;
+            --incorrect: #EE6C4D;
+            --text-color: #000000;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        #quiz-container {
+            background-color: var(--container-bg);
+            max-width: 700px;
+            width: 100%;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            border-top: 8px solid var(--primary);
+        }
+
+        h1 { color: var(--primary); text-align: center; }
+        
+        .question { font-size: 1.2rem; font-weight: bold; margin-bottom: 20px; }
+
+        .options-list { list-style: none; padding: 0; }
+
+        .option-btn {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 2px solid var(--accent);
+            background: none;
+            cursor: pointer;
+            border-radius: 8px;
+            text-align: left;
+            font-size: 1rem;
+            transition: 0.3s;
+            color: var(--text-color);
+        }
+
+        .option-btn:hover:not([disabled]) {
+            background-color: var(--bg-color);
+        }
+
+        .feedback {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            display: none;
+            font-weight: 500;
+        }
+
+        #next-btn, #restart-btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            cursor: pointer;
+            float: right;
+            display: none;
+            margin-top: 20px;
+        }
+
+        #score-screen { display: none; text-align: center; }
+        .summary-box { text-align: left; background: #f4f4f4; padding: 20px; border-radius: 8px; margin-top: 20px; }
+    </style>
+</head>
+<body>
+
+<div id="quiz-container">
+    <div id="quiz-box">
+        <h1 id="q-title">Question 1/25</h1>
+        <p id="question-text" class="question"></p>
+        <div id="options-container" class="options-list"></div>
+        <div id="feedback-box" class="feedback"></div>
+        <button id="next-btn">Next Question</button>
+    </div>
+
+    <div id="score-screen">
+        <h1>Review Complete!</h1>
+        <p style="font-size: 2rem;">Your Score: <span id="final-score"></span>/25</p>
+        <div class="summary-box">
+            <h3>Key Study Areas:</h3>
+            <ul id="study-feedback"></ul>
+        </div>
+        <button id="restart-btn" onclick="location.reload()">Try Again</button>
+    </div>
+</div>
+
+<script>
+    const quizData = [
+        { q: "A sample of ice at its melting point absorbs 12.5 kJ. If Hfus is 6.01 kJ/mol, what mass melted? (Molar mass = 18.02 g/mol)", a: ["37.5 g", "2.08 g", "1.35 g", "0.0375 g"], c: 0, tag: "Math" },
+        { q: "Which describes the 'albedo effect'?", a: ["Reflection of solar radiation; higher albedo cools.", "Trapping infrared radiation.", "Photosynthesis.", "Ocean currents."], c: 0, tag: "Albedo" },
+        { q: "Quantity of energy to heat 250 g of water from 20.0°C to 45.0°C?", a: ["2.6 x 10^4 J", "26,187.5 J", "4.7 x 10^4 J", "20.9 J"], c: 0, tag: "Math" },
+        { q: "Coriolis effect in the Northern Hemisphere deflects air to the:", a: ["Right (East)", "Left (West)", "Upward", "South"], c: 0, tag: "Coriolis" },
+        { q: "Which layer contains the ozone layer?", a: ["Stratosphere", "Troposphere", "Mesosphere", "Lithosphere"], c: 0, tag: "Atmosphere" },
+        { q: "Energy to vaporize 50.0 g of water at 100°C? (Hvap = 40.7 kJ/mol)", a: ["113 kJ", "2035 kJ", "2.26 kJ", "14.7 kJ"], c: 0, tag: "Math" },
+        { q: "What is an 'open system'?", a: ["Exchanges both matter and energy", "Exchanges energy only", "No exchange", "Net budget is zero"], c: 0, tag: "Systems" },
+        { q: "100g metal at 90°C in 100g water at 20°C reaches 25°C. Metal's specific heat?", a: ["0.322 J/g°C", "4.19 J/g°C", "2.09 J/g°C", "0.080 J/g°C"], c: 0, tag: "Math" },
+        { q: "Primary natural greenhouse gas?", a: ["Water Vapor", "Nitrogen", "Oxygen", "Argon"], c: 0, tag: "Greenhouse" },
+        { q: "Water moves heat globally because of its:", a: ["High specific heat capacity", "Low solid density", "High albedo", "Low Hvap"], c: 0, tag: "Hydrosphere" },
+        { q: "During a phase change, temperature:", a: ["Remains constant", "Increases", "Decreases", "Fluctuates"], c: 0, tag: "Phase Changes" },
+        { q: "Primary reason for seasons?", a: ["Tilt of Earth's axis", "Distance from sun", "Solar fluctuations", "Rotation speed"], c: 0, tag: "Astronomy" },
+        { q: "Solar energy is most 'spread out' at the:", a: ["Polar zones", "Equator", "Tropics", "Stratosphere"], c: 0, tag: "Radiation" },
+        { q: "Positive net radiation budget leads to:", a: ["Increasing global temps", "Decreasing global temps", "Increased albedo", "Slower rotation"], c: 0, tag: "Budget" },
+        { q: "Heat of fusion if 25.0 kJ melts 75.0 g of a substance?", a: ["0.333 kJ/g", "1.88 kJ/g", "3.00 kJ/g", "13.3 kJ/g"], c: 0, tag: "Math" },
+        { q: "Convection currents are defined as:", a: ["Warm air rising, cool air sinking", "Conduction through ground", "Density differences alone", "Moon radiation"], c: 0, tag: "Convection" },
+        { q: "Which has the highest albedo?", a: ["Snow and Ice", "Deep Ocean", "Forest", "Soil"], c: 0, tag: "Albedo" },
+        { q: "Find 'c' for 50g object using 1250J over 15°C:", a: ["1.67 J/g°C", "0.600 J/g°C", "25.0 J/g°C", "375 J/g°C"], c: 0, tag: "Math" },
+        { q: "Ice core samples show history by:", a: ["Trapped gas bubbles", "Ice thickness", "Salt content", "Fossils"], c: 0, tag: "Evidence" },
+        { q: "Solid directly to gas:", a: ["Sublimation", "Deposition", "Condensation", "Freezing"], c: 0, tag: "Phase Changes" },
+        { q: "Heat 0°C to 10°C with 1.51 kJ. Mass of water?", a: ["36.0 g", "15.1 g", "4.52 g", "151 g"], c: 0, tag: "Math" },
+        { q: "Climatograph displays:", a: ["Bars (Precip) & Line (Temp)", "Line (Precip) & Bars (Temp)", "Dots", "Shaded regions"], c: 0, tag: "Climate" },
+        { q: "Biome with permafrost and low precipitation?", a: ["Tundra", "Taiga", "Grassland", "Deciduous"], c: 0, tag: "Biomes" },
+        { q: "Sig digits in 0.005040 m?", a: ["4", "7", "3", "6"], c: 0, tag: "Sig Digits" },
+        { q: "Energy returns to space via:", a: ["Infrared Radiation", "Conduction", "Convection", "Visible Light"], c: 0, tag: "Radiation" }
+    ];
+
+    let currentQ = 0;
+    let score = 0;
+    let mistakes = [];
+
+    function loadQuestion() {
+        const qBox = quizData[currentQ];
+        document.getElementById("q-title").innerText = `Question ${currentQ + 1}/25`;
+        document.getElementById("question-text").innerText = qBox.q;
+        const optionsContainer = document.getElementById("options-container");
+        optionsContainer.innerHTML = "";
+        
+        qBox.a.forEach((opt, index) => {
+            const btn = document.createElement("button");
+            btn.className = "option-btn";
+            btn.innerText = opt;
+            btn.onclick = () => checkAnswer(index);
+            optionsContainer.appendChild(btn);
+        });
+        document.getElementById("feedback-box").style.display = "none";
+        document.getElementById("next-btn").style.display = "none";
+    }
+
+    function checkAnswer(idx) {
+        const qBox = quizData[currentQ];
+        const feedback = document.getElementById("feedback-box");
+        const buttons = document.querySelectorAll(".option-btn");
+        
+        buttons.forEach(btn => btn.disabled = true);
+        feedback.style.display = "block";
+
+        if(idx === qBox.c) {
+            score++;
+            feedback.innerText = "Correct!";
+            feedback.style.backgroundColor = "var(--correct)";
+            feedback.style.color = "white";
+        } else {
+            mistakes.push(qBox.tag);
+            feedback.innerText = "Incorrect. The correct answer was: " + qBox.a[qBox.c];
+            feedback.style.backgroundColor = "var(--incorrect)";
+            feedback.style.color = "white";
+        }
+        document.getElementById("next-btn").style.display = "block";
+    }
+
+    document.getElementById("next-btn").onclick = () => {
+        currentQ++;
+        if(currentQ < quizData.length) {
+            loadQuestion();
+        } else {
+            showScore();
+        }
+    };
+
+    function showScore() {
+        document.getElementById("quiz-box").style.display = "none";
+        document.getElementById("score-screen").style.display = "block";
+        document.getElementById("final-score").innerText = score;
+        
+        const feedbackList = document.getElementById("study-feedback");
+        const uniqueMistakes = [...new Set(mistakes)];
+        
+        if(uniqueMistakes.length === 0) {
+            feedbackList.innerHTML = "<li>Perfect! You have a solid grasp of Global Systems.</li>";
+        } else {
+            uniqueMistakes.forEach(m => {
+                let msg = "";
+                if(m === "Math") msg = "Practice multi-step Q=mcΔT and phase change calculations. Watch your units (kJ vs J)!";
+                if(m === "Sig Digits") msg = "Review the 'Atlantic-Pacific' rule for leading and trailing zeros.";
+                if(m === "Albedo") msg = "Remember: High Albedo = Reflective (Snow/Ice); Low Albedo = Absorbent (Water/Forest).";
+                if(m === "Phase Changes") msg = "Note that temperature stays constant during the plateau of a phase change.";
+                feedbackList.innerHTML += `<li><strong>${m}:</strong> ${msg}</li>`;
+            });
+        }
+    }
+
+    loadQuestion();
+</script>
+
+</body>
+</html>
